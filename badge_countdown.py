@@ -75,6 +75,11 @@ def render(text: str) -> list[list[int]]:
     return pixels
 
 
+def flip_upside_down(pixels: list[list[int]]) -> list[list[int]]:
+    """Rotate the pixel matrix 180°, so the badge reads right-side up when worn clipped upside down."""
+    return [row[::-1] for row in pixels[::-1]]
+
+
 def to_badge_bitmap(pixels: list[list[int]]) -> tuple[bytes, int]:
     """Pack pixels into the badge format: byte-columns of 8 px, 11 bytes each."""
     n_cols = (WIDTH + 7) // 8
@@ -122,8 +127,12 @@ class Badge:
                 pass
         self.dev = None
 
-    def show(self, text: str, blink: bool = False, brightness: int = 100, mode: int = 9):
-        bitmap, length = to_badge_bitmap(render(text))
+    def show(self, text: str, blink: bool = False, brightness: int = 100, mode: int = 9,
+             upside_down: bool = False):
+        pixels = render(text)
+        if upside_down:
+            pixels = flip_upside_down(pixels)
+        bitmap, length = to_badge_bitmap(pixels)
         packet = build_packet(bitmap, length, mode=mode, blink=blink, brightness=brightness)
         for attempt in range(2):
             try:
@@ -190,6 +199,8 @@ def main():
                     help="display mode: 0-8 standard (4 = still-centered), "
                          "9 = smooth, 10 = rotate -- some firmware only accepts 0-8 and "
                          "shows nothing for 9/10 (default: 4)")
+    ap.add_argument("--upside-down", "-U", action="store_true",
+                    help="flip the text 180°, for badges worn clipped upside down")
     ap.add_argument("--dry-run", action="store_true", help="print only, don't touch the badge")
     args = ap.parse_args()
 
@@ -215,7 +226,8 @@ def main():
                 print(f"\r{text:>10}", end="", flush=True)
                 if not args.dry_run:
                     try:
-                        badge.show(text, blink=blink, brightness=args.brightness, mode=args.mode)
+                        badge.show(text, blink=blink, brightness=args.brightness, mode=args.mode,
+                                   upside_down=args.upside_down)
                     except (OSError, IOError) as e:
                         print(f"\n[badge not reachable: {e}] retrying...")
                         time.sleep(2)
