@@ -1,0 +1,17 @@
+[project]
+name = "magic-badge-countdown"
+version = "0.1.0"
+description = "Countdown timer for the BadgeMagic / LS32 11x44 LED badge"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["hidapi"]
+
+[project.scripts]
+badge-countdown = "badge_countdown:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["badge_countdown.py"]
