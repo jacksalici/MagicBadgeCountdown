@@ -16,7 +16,7 @@ uv run badge_countdown.py                # asks for date and timezone
 uv run badge_countdown.py -t "2026-10-01 09:30" --dry-run   # no badge, terminal only
 ```
 
-Options: `-t/--target "YYYY-MM-DD HH:MM"` (`24:00` = end of day), `-z/--tz` (`AoE`, `UTC`, `UTC+2`, `Europe/Rome`, `local`), `-m/--mode` (display mode, default 9), `-B/--brightness` (25/50/75/100).
+Options: `-t/--target "YYYY-MM-DD HH:MM"` (`24:00` = end of day), `-z/--tz` (`AoE`, `UTC`, `UTC+2`, `Europe/Rome`, `local`), `-m/--mode` (display mode, default 4; modes 9/10 are undocumented extensions some firmware ignores, showing a blank display), `-B/--brightness` (25/50/75/100).
 
 Or install it as a command with `uv sync` and run `uv run badge-countdown ...`.
 

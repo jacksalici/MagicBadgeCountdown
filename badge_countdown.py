@@ -186,9 +186,10 @@ def main():
     ap.add_argument("--tz", "-z", default=None,
                     help="AoE, UTC, UTC+2, Europe/Rome, local ... (default: local)")
     ap.add_argument("--brightness", "-B", type=int, default=100, choices=(25, 50, 75, 100))
-    ap.add_argument("--mode", "-m", type=int, default=9,
+    ap.add_argument("--mode", "-m", type=int, default=4,
                     help="display mode: 0-8 standard (4 = still-centered), "
-                         "9 = smooth, 10 = rotate (default: 9)")
+                         "9 = smooth, 10 = rotate -- some firmware only accepts 0-8 and "
+                         "shows nothing for 9/10 (default: 4)")
     ap.add_argument("--dry-run", action="store_true", help="print only, don't touch the badge")
     args = ap.parse_args()
 
